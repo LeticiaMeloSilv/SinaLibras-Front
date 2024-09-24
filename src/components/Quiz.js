@@ -1,0 +1,149 @@
+
+import styles from './Quiz.module.css'
+import logo from '../img/logoGrande.png';
+
+// import logoGrande from '../img/LogoGrande.png';
+
+import { useState } from 'react'
+import { useEffect } from 'react';
+
+import { AppContext } from '../context/AppContext';
+import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+
+//EU TENHO QUE PEGAR A FUNCAO QUE VAI TRAZER AS PERGUNTAS,
+// DAI EU VOU CRIAR CARDS NA TELA CONFORME O RETORNO DA API,
+// A CADA RESPOSTA QUE A PESSOA DER, 
+//EU VOU VERIFICAR SE A AUTERNATIVA ESTÁ CORRETA,
+//E GUARDAR OS DADOS COMO ID DA PERGUNTA E ID DA RESPOSTA FORNECIDA,
+//PARA NO FINAL, VERIFICAR A QUANTIDADE DE ACERTOS,
+// SE ACERTOU 70%, EU VOU REDIRECIONAR PARA A TELA DE PARABENS, QUE VAI REDIRECIONAR PARA A TELA DE CADASTRO(LEVANDO CONSIGO O EMAIL, PARA DEIXAR O CAMPO AUTOCOMPLETADO), 
+//MAS CASO NN, VOU ENVIAR O EMAIL DA PESSOA PARA O BACK, PARA BLOQUEAR SEU ACESSO, E REDIRECIONAR PARA A TELA DE FALHA
+
+
+import React from 'react';
+import AcertouQuiz from './AcertouQuiz';
+
+
+
+function Quiz() {
+    const [erroNull, setErroNull] = useState(true)
+    const [textoErro, setTextoErro] = useState('')
+    const [perguntaAPI, setPerguntaAPI] = useState()
+    const [videoAPI, setVideoAPI] = useState()
+    const [respostaAPI, setRespostaAPI] = useState([])
+
+
+    //no set dados eu vou enviar o email para a tela de login, para q o campo seja preenchido automaticamente
+    const { setDados } = useContext(AppContext);
+
+    const BASE_URL = 'http://localhost:8080/'
+
+    const [respostas, setRespostas] = useState([])
+
+    //async function validarResposta(e) {
+
+
+
+
+    //  const navigate = useNavigate();
+    function gerarNumeroAleatorio() {
+        return Math.floor(Math.random() * 20) + 1; // Gera um número entre 1 e 20
+    }
+
+    //tudo certo, o return ta sendo assim
+    // Pergunta: Qual é a capital da França?
+    // Vídeo: video1.mp4
+    // Respostas: [
+    //     { alternativa: "Paris", status: 1 },
+    //     { alternativa: "Londres", status: 0 },
+    //     { alternativa: "Berlim", status: 0 }
+    // ]
+    async function pegarQuestoes() {
+        //const numeroAleatorio = gerarNumeroAleatorio();
+        const numeroAleatorio = 1;//pq até ent só tem uma pergunta no banco
+        const url = `${BASE_URL}v1/sinalibras/questao/${numeroAleatorio}`
+        const response = await fetch(url)
+        const data = await response.json()
+        console.log(data);
+        if (data) {
+            // Extrair a pergunta e as respostas
+            const questao = data.questao[0];
+            const pergunta = questao.pergunta;
+            const video = questao.video;
+
+            // Separar as respostas
+            const respostas = data.questao.map(q => ({
+                alternativa: q.alternativa,
+                status: q.status
+            }));
+
+            console.log("Pergunta:", pergunta);
+            console.log("Vídeo:", video);
+            console.log("Respostas:", respostas);
+            setPerguntaAPI(pergunta)
+            const videoTeste='https://drive.google.com/file/d/1edg8abnZZFzEvMZlErMdQiJWURADnV0S/view?usp=drive_link'
+            setVideoAPI(videoTeste)
+            setRespostaAPI(respostas)
+            criarCard()
+        }
+        else {
+            setErroNull(false)
+            setTextoErro('Ocorreu um erro, contate o administrador')
+        }
+
+    }
+    function criarCard() {
+        respostas.forEach(element => {
+            const cont=+
+            <h3 onClick={setRespostas([true])}>{respostas[cont].alternativa}</h3>
+        });
+        if () {
+            
+        }
+    }
+
+    //   const navigate = useNavigate();
+
+    // const url = `${BASE_URL}v1/sinalibras/alunosemail/${email}`//MUDAR URL PARA A DO ENDPOINT 
+    // const response=await fetch(url)
+    // const data=await response.json()
+    // if (data.alternativa) {
+    ///const dadosParaEnviar = {
+    //            id: dadoEmail.id_aluno,
+    //      };
+    //
+    //     setDados(dadosParaEnviar)
+    //        navigate('/Home');
+
+
+
+    // const novoItem = `Item ${itens.length + 1}`;
+    // Atualiza o estado com o novo item
+    // setRespostas(prevRespostas => [...prevRespostas, novoItem]);
+
+    return (
+        <div className={styles.body} onLoad={pegarQuestoes} >
+            <img className={styles.logo} src={logo}></img>
+            <div className={styles.tela}>
+                <div className={styles.pergunta}>
+                    <h3 className={styles.textoPergunta}>{perguntaAPI}</h3>
+                    <h5 className={styles.textoAuxilio}>(escolha a alternativa correta)</h5>
+                        <video autoPlay loop muted>
+                            <source src={videoAPI} type="video/mp4"></source>{/*AQ PEGA UM VIDEO ACREDITO Q LOCAL, POR ESQUANTO TA UM VIDEO FICTICIO, MAS PRA PEGAR O DE VDD, É SÓ EXCLUIR A CRIACAO DA CONST DA LINHA 4, Q DAI VAI SER SUBSTITUIDO PELO DA FUNCAO ACIMA*/}
+                            Seu navegador não suporta o elemento de vídeo.
+                        </video>
+                    <div className={styles.divVideo}>
+                        
+
+                        {/* esse iframe pega do youtube ou outra plataforma, um video */}
+                        {/* <iframe className={styles.videos} onClick={<AcertouQuiz/>} src="https://www.youtube.com/embed/pDbcC-xSat4?si=9ez3eckh1rHsTmGK" title="EXEMPLO DE VIDEO VINDO DO BACK" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" notallowfullscreen autoPlay></iframe> */}
+                    </div>
+
+                </div>
+            </div>
+            <h2 color='red'>{textoErro}</h2>
+        </div>
+    );
+}
+export default Quiz
