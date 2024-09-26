@@ -4,9 +4,7 @@ export const AppContext = createContext();
 
 export function AppProvider({ children }) {
     const [dados, setDados] = useState(null);
-    
-    console.log('entrei aq');
-    return (
+        return (
         <AppContext.Provider value={{ dados, setDados }}>
             {children}
         </AppContext.Provider>

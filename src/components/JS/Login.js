@@ -1,12 +1,12 @@
 
-import styles from './Login.module.css'
-import logo from '../img/Logo.png';
+import styles from '../CSS/Login.module.css'
+import logo from '../../img/Logo.png';
 // import logoGrande from '../img/LogoGrande.png';
 
 import { useState } from 'react'
 import { useEffect } from 'react';
 
-import { AppContext } from '../context/AppContext';
+import { AppContext } from '../../context/AppContext';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 
@@ -16,7 +16,7 @@ import React from 'react';
 
 function Login() {
     const { setDados } = useContext(AppContext);
-    
+
     const BASE_URL = 'http://localhost:8080/'
 
     const [senha, setSenha] = useState()
@@ -38,10 +38,12 @@ function Login() {
             const url = `${BASE_URL}v1/sinalibras/alunosemail/${email}`
     const response=await fetch(url)
     const data=await response.json()
-    const dadoEmail=data.alunos[0]
+    console.log(data);
+    const dadoEmail=data.alunos
     if (dadoEmail.senha==senha) {
                 const dadosParaEnviar = {
-                    id: dadoEmail.id_aluno,
+                    // id: dadoEmail.id_aluno,
+                                        id: 1,
                 };
 
                 setDados(dadosParaEnviar)

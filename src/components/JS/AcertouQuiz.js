@@ -1,5 +1,5 @@
-import styles from './Quiz.module.css'
-import logo from '../img/Logo.png'
+import styles from '../CSS/Quiz.module.css'
+import logo from '../../img/Logo.png'
 function AcertouQuiz() {
     const resultado='70%'
     return(

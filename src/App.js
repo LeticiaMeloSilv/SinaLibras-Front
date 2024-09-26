@@ -1,11 +1,13 @@
 
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Cadastro from './components/Cadastro'
-import Login from './components/Login'
-import Home from './components/Home'
-import Quiz from './components/Quiz'
-import AcertouQuiz from './components/AcertouQuiz'
+import Cadastro from './components/JS/Cadastro'
+import Login from './components/JS/Login'
+import Home from './components/JS/Home'
+import Quiz from './components/JS/Quiz'
+import Configuracoes from './components/JS/Configuracoes'
+
+import AcertouQuiz from './components/JS/AcertouQuiz'
 
 import { AppProvider } from './context/AppContext'; // Importa o contexto
 
@@ -20,10 +22,13 @@ function App() {
     <AppProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Quiz />} />
+          <Route path="/" element={<Home />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Cadastro" element={<Cadastro />} />
           <Route path="/Home" element={<Home />} />
+          <Route path="/Quiz" element={<Quiz />} />
+          <Route path="/Configuracoes" element={<Configuracoes />} />
+
         </Routes>
       </BrowserRouter>
     </AppProvider>

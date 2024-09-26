@@ -1,7 +1,7 @@
-import styles from './Cadastro.module.css'
-import logo from '../img/Logo.png';
-import professor from '../img/Professor.png';
-import aluno from '../img/Aluno.png';
+import styles from '../CSS/Cadastro.module.css'
+import logo from '../../img/Logo.png';
+import professor from '../../img/Professor.png';
+import aluno from '../../img/Aluno.png';
 
 import { useState } from 'react'
 import { useEffect } from 'react';
@@ -62,7 +62,7 @@ const navigate = useNavigate();
             email: email,
             senha: senha,
             data_nascimento: data_nasc,
-            foto_perfil: null,
+            foto_perfil: "",
             data_cadastro:data_atual
         };
         if (name == null || name == undefined || name == '' ||
@@ -85,7 +85,8 @@ const navigate = useNavigate();
         else {
             
             try {
-                const res = await fetch(`${BASE_URL}v1/sinalibras/aluno`, {
+                console.log(alunoDados);
+                const res = await fetch(`${BASE_URL}v1/sinalibras/alunos`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

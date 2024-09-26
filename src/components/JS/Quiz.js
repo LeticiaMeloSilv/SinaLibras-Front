@@ -1,13 +1,13 @@
 
-import styles from './Quiz.module.css'
-import logo from '../img/logoGrande.png';
+import styles from '../CSS/Quiz.module.css'
+import logo from '../../img/logoGrande.png';
 
 // import logoGrande from '../img/LogoGrande.png';
 
 import { useState } from 'react'
 import { useEffect } from 'react';
 
-import { AppContext } from '../context/AppContext';
+import { AppContext } from '../../context/AppContext';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 
@@ -65,7 +65,6 @@ function Quiz() {
         const url = `${BASE_URL}v1/sinalibras/questao/${numeroAleatorio}`
         const response = await fetch(url)
         const data = await response.json()
-        console.log(data);
         if (data) {
             // Extrair a pergunta e as respostas
             const questao = data.questao[0];
@@ -78,9 +77,6 @@ function Quiz() {
                 status: q.status
             }));
 
-            console.log("Pergunta:", pergunta);
-            console.log("Vídeo:", video);
-            console.log("Respostas:", respostas);
             setPerguntaAPI(pergunta)
             const videoTeste='https://drive.google.com/file/d/1edg8abnZZFzEvMZlErMdQiJWURADnV0S/view?usp=drive_link'
             setVideoAPI(videoTeste)
@@ -94,13 +90,13 @@ function Quiz() {
 
     }
     function criarCard() {
-        respostas.forEach(element => {
-            const cont=+
-            <h3 onClick={setRespostas([true])}>{respostas[cont].alternativa}</h3>
-        });
-        if () {
+        // respostas.forEach(element => {
+        //     const cont=+
+        //     <h3 onClick={setRespostas([true])}>{respostas[cont].alternativa}</h3>
+        // });
+        // if () {
             
-        }
+        // }
     }
 
     //   const navigate = useNavigate();
