@@ -25,6 +25,10 @@
     width: fill;
     gap: 30px;
 }
+.entrar{
+    color: aliceblue;
+    cursor: pointer;
+}
 
 .card {
     display: flex;

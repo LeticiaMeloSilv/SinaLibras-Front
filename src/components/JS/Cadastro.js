@@ -6,7 +6,10 @@ import aluno from '../../img/Aluno.png';
 import { useState } from 'react'
 import { useEffect } from 'react';
 
+
+import { AppContext } from '../../context/AppContext';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
 
 import React from 'react';
 
@@ -32,6 +35,7 @@ const dateString = currentDate.toLocaleDateString('pt-BR');
 const [dia, mes, ano] = dateString.split('/');
 const data_atual=`${ano}-${mes}-${dia}`
 
+const { setDados } = useContext(AppContext);
 
 const navigate = useNavigate();
 
@@ -44,7 +48,8 @@ const navigate = useNavigate();
         }//VERIFICAR SE O EMAIL EXISTE E PEGAR A DATA ATUAL PRA MANDAR NO CADASTRO
         else {
             try {
-                navigate('/Login');           
+                            
+                      
                 
             } catch (error) {
                 console.log(error);
@@ -85,23 +90,34 @@ const navigate = useNavigate();
         else {
             
             try {
-                console.log(alunoDados);
-                const res = await fetch(`${BASE_URL}v1/sinalibras/alunos`, {
+                const res = await fetch(`${BASE_URL}v1/sinalibras/aluno`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(alunoDados),
-                });
-
-                if (!res.ok) {
+                })
+                .then(response => response.json())
+.then(data => {
+    console.log(data); 
+    if (!data) {
                     
-            setErroNull(false)
-            setTextoErro('Ocorreu um erro, favor, verifique se preencheu tudo corretamente')
-                }
-                else{
-                    alert('Cadastro realizado c sucesso(linha 92)')
-                }
+        setErroNull(false)
+        setTextoErro('Ocorreu um erro, favor, verifique se preencheu tudo corretamente')
+            }
+            else{
+                const dadosParaEnviar = {
+                    id: data.aluno.id_aluno,
+                };
+
+                setDados(dadosParaEnviar)
+                navigate('/Home');          
+                  }
+})
+.catch(error => console.error('Erro:', error));
+                
+
+                
 
             } catch (error) {
                 console.error('Erro na requisição:', error);
@@ -168,6 +184,9 @@ const navigate = useNavigate();
                         </div>
                     </form>
                     <button className={styles.botao} onClick={mandarAluno} hidden={isHiddenAluno}>Cadastrar</button>
+                    
+                    <h3 className={styles.entrar} hidden={isHiddenAluno}>Já tem uma conta?</h3>
+                    <h2 className={styles.entrar} onClick={()=>navigate('/Login')} hidden={isHiddenAluno}>Entrar</h2>
                     <div className={styles.direita_professor} hidden={isHiddenProfessor} >
                         {/* PROFESSOR */}
                         <h3 hidden={isHiddenProfessor} className={styles.texto_professor}>Para ser mentor em nosso aplicativo, precisamos validar seu nivel de conhecimento em Libras, para isso você precisará responder a 15 perguntas.</h3>

@@ -90,6 +90,8 @@
 }
 .texto{
     color: aliceblue;
+    cursor: pointer;
+
 }
 
 .erro_null {

@@ -22,7 +22,7 @@ function App() {
     <AppProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Quiz />} />
+          <Route path="/" element={<Cadastro />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Cadastro" element={<Cadastro />} />
           <Route path="/Home" element={<Home />} />

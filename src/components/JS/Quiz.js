@@ -183,11 +183,15 @@ function Quiz() {
                 video.appendChild(source);
                 video.innerHTML = "Seu navegador não suporta o elemento de vídeo.";
                 console.log(element);
+                const divRespostas=document.createElement('div')
+                divRespostas.className=styles.divRespostas
+
+                
                 
                         divPergunta.appendChild(textoPergunta);
                         divPergunta.appendChild(textoAuxilio);
                         divPergunta.appendChild(video);
-                const atividades = element.alternativas
+                const atividades = element.alternativas;
                 atividades.forEach(atividade => {
                     console.log(atividade);
                     
@@ -199,14 +203,21 @@ function Quiz() {
                         }
                         console.log(resposta);
                         console.log(respostasUsuario);
-                        
                     })
-                    divPergunta.appendChild(resposta);
+                    divRespostas.appendChild(resposta);
+                    divPergunta.appendChild(divRespostas);
                 });
+
                 
                 // Adiciona a pergunta à div geral
                 divGeral.appendChild(divPergunta);
             });
+            const button=document.createElement('button')
+                button.className=styles.btn
+                button.textContent='ENVIAR'
+            divGeral.appendChild(button);
+
+         
 
         }
         // else {
@@ -228,6 +239,7 @@ function Quiz() {
                     
 
                 </div> */}
+            
             </div>
             {/* <h2 color='red'>{textoErro}</h2> */}
         </div>

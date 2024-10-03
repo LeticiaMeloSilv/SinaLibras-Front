@@ -35,25 +35,58 @@ function Login() {
             setTextoErro('Todos os campos devem ser preenchidos, favor verificar')
                 }
         else{
-            const url = `${BASE_URL}v1/sinalibras/alunosemail/${email}`
-    const response=await fetch(url)
-    const data=await response.json()
-    console.log(data);
-    const dadoEmail=data.alunos
-    if (dadoEmail.senha==senha) {
-                const dadosParaEnviar = {
-                    // id: dadoEmail.id_aluno,
-                                        id: 1,
-                };
+            
+//         const url = `${BASE_URL}v1/sinalibras/aluno/validacao`
+//         const response = await fetch(url)
+//         const data = await response.json()
+// console.log(data);
+const alunoDados = {
+    email: email,
+    senha: senha
+}
+await fetch(`${BASE_URL}v1/sinalibras/aluno/validacao`, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(alunoDados),
+})
+.then(response => response.json())
+.then(data => {
+console.log(data);
+if(data.status){
+    const dadosParaEnviar = {
+                        id: data.aluno[0].id_aluno,
+                    };
+    
+                    setDados(dadosParaEnviar)
+                    navigate('/Home');
+}
+else{
+    setErroNull(false)
+    setTextoErro('Seus dados não conferem')
+}
 
-                setDados(dadosParaEnviar)
-                navigate('/Home');
+})
+        //         const url = `${BASE_URL}v1/sinalibras/alunosemail/${email}`
+    // const response=await fetch(url)
+    // const data=await response.json()
+    // console.log(data);
+    // const dadoEmail=data.alunos
+    // if (dadoEmail.senha==senha) {
+    //             const dadosParaEnviar = {
+    //                 // id: dadoEmail.id_aluno,
+    //                                     id: 1,
+    //             };
 
-    }
-    else{
-        setErroNull(false)
-        setTextoErro('Seus dados não conferem')
-    }    
+    //             setDados(dadosParaEnviar)
+    //             navigate('/Home');
+
+    // }
+    // else{
+    //     setErroNull(false)
+    //     setTextoErro('Seus dados não conferem')
+    // }    
         }
     }
 
