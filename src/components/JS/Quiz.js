@@ -22,6 +22,7 @@ import { useContext } from 'react';
 
 
 import React from 'react';
+import { click } from '@testing-library/user-event/dist/click';
 
 
 
@@ -145,44 +146,90 @@ import React from 'react';
 // }
 function Quiz() {
     const BASE_URL = 'http://localhost:8080/'
-    
+
     // const [erroNull, setErroNull] = useState(true)
     // const [textoErro, setTextoErro] = useState('')
+    const [respostasUsuario, setRespostas] = useState([])
 
-        async function pegarQuestoes() {
+    async function pegarQuestoes() {
+
         const url = `${BASE_URL}v1/sinalibras/questoes`
         const response = await fetch(url)
         const data = await response.json()
-        if (data) {
+        const questoes = data.questoes
+
+        if (questoes) {
             console.log(data);
-            
+            const divGeral = document.getElementById('div')
+            questoes.forEach(element => {
+                const divPergunta = document.createElement('div')
+                divPergunta.className=styles.pergunta
+
+                const textoPergunta = document.createElement('h3')
+                textoPergunta.textContent = element.pergunta
+                textoPergunta.className=styles.textoPergunta
+                
+                const textoAuxilio = document.createElement('h5')
+                textoAuxilio.textContent  = '(escolha a alternativa correta)'
+                textoAuxilio.className=styles.textoAuxilio
+
+                const video = document.createElement('video');
+                video.autoplay = true;
+                video.loop = true;
+                video.muted = true;
+                const source = document.createElement('source');
+                source.src = element.video
+                source.type = 'video/mp4';
+                video.appendChild(source);
+                video.innerHTML = "Seu navegador não suporta o elemento de vídeo.";
+                console.log(element);
+                
+                        divPergunta.appendChild(textoPergunta);
+                        divPergunta.appendChild(textoAuxilio);
+                        divPergunta.appendChild(video);
+                const atividades = element.alternativas
+                atividades.forEach(atividade => {
+                    console.log(atividade);
+                    
+                    const resposta=document.createElement('h3')
+                    resposta.textContent=atividade.alternativa
+                    resposta.addEventListener('click', ()=>{
+                        if (resposta==atividade.resposta && atividade.status==1) {
+                            setRespostas([true]) 
+                        }
+                        console.log(resposta);
+                        console.log(respostasUsuario);
+                        
+                    })
+                    divPergunta.appendChild(resposta);
+                });
+                
+                // Adiciona a pergunta à div geral
+                divGeral.appendChild(divPergunta);
+            });
+
         }
         // else {
         //     setErroNull(false)
         //     setTextoErro('Ocorreu um erro, contate o administrador')
-        }
-
     }
 
     return (
         <div className={styles.body} onLoad={pegarQuestoes} >
-            {/* <img className={styles.logo} src={logo}></img>
-            <div className={styles.tela}>
-                <div className={styles.pergunta}>
+            <img className={styles.logo} src={logo}></img>
+            <div className={styles.tela} id="div">
+                {/* <div className={styles.pergunta} >
                     <h3 className={styles.textoPergunta}>{perguntaAPI}</h3>
                     <h5 className={styles.textoAuxilio}>(escolha a alternativa correta)</h5>
                     <video autoPlay loop muted>
                         <source src={videoAPI} type="video/mp4"></source>
                         Seu navegador não suporta o elemento de vídeo.
                     </video>
-                    <div className={styles.divVideo}>
+                    
 
-
-                    </div>
-
-                </div>
+                </div> */}
             </div>
-            <h2 color='red'>{textoErro}</h2> */}
+            {/* <h2 color='red'>{textoErro}</h2> */}
         </div>
     );
 }
