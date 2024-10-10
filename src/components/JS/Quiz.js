@@ -144,7 +144,19 @@ import { click } from '@testing-library/user-event/dist/click';
 //         </div>
 //     );
 // }
+import { useNavigate } from 'react-router-dom';
+
+import { useContext } from 'react';
+import { AppContext } from '../../context/AppContext';
+
+
+import React from 'react';
+
 function Quiz() {
+    
+        const { dados } = useContext(AppContext);
+        console.log(dados);
+    
     const BASE_URL = 'http://localhost:8080/'
 
     // const [erroNull, setErroNull] = useState(true)
@@ -152,15 +164,16 @@ function Quiz() {
     const [respostasUsuario, setRespostas] = useState([])
 
     async function pegarQuestoes() {
-
+        const body=document.getElementById('body')
+        const divGeral = document.getElementById('div')
+        try {
         const url = `${BASE_URL}v1/sinalibras/questoes`
         const response = await fetch(url)
         const data = await response.json()
         const questoes = data.questoes
 
         if (questoes) {
-            console.log(data);
-            const divGeral = document.getElementById('div')
+            body.style.height='100%'
             questoes.forEach(element => {
                 const divPergunta = document.createElement('div')
                 divPergunta.className=styles.pergunta
@@ -182,7 +195,6 @@ function Quiz() {
                 source.type = 'video/mp4';
                 video.appendChild(source);
                 video.innerHTML = "Seu navegador não suporta o elemento de vídeo.";
-                console.log(element);
                 const divRespostas=document.createElement('div')
                 divRespostas.className=styles.divRespostas
 
@@ -193,14 +205,27 @@ function Quiz() {
                         divPergunta.appendChild(video);
                 const atividades = element.alternativas;
                 atividades.forEach(atividade => {
-                    console.log(atividade);
                     
                     const resposta=document.createElement('h3')
                     resposta.textContent=atividade.alternativa
+                    resposta.className=styles.respostas
+
                     resposta.addEventListener('click', ()=>{
-                        if (resposta==atividade.resposta && atividade.status==1) {
-                            setRespostas([true]) 
-                        }
+                        console.log(atividade);
+                            // setRespostas({id_alternativa:atividade.id_alternativa, id_professor:id_professor}) 
+                            resposta.style.backgroundColor="#7FA1C3"
+                            resposta.style.borderRadius="32px"
+                            resposta.className=styles.respostaSelecionada
+
+
+
+                            //COMO DEVE SER O RETORNO
+                            // const dadosUsuario = [
+                            //     { id_alternativa: 1, id_usuario_teste: 1 },
+                            //     { id_alternativa: 2, id_usuario_teste: 1 },
+                            //     { id_alternativa: 3, id_usuario_teste: 1 }
+                            // ];
+                        
                         console.log(resposta);
                         console.log(respostasUsuario);
                     })
@@ -220,13 +245,26 @@ function Quiz() {
          
 
         }
-        // else {
-        //     setErroNull(false)
-        //     setTextoErro('Ocorreu um erro, contate o administrador')
+        else {
+            const erro = document.createElement('h5')
+            erro.textContent  = 'Ocorreu um erro, contate o administrador'
+            erro.className=styles.textoErro
+            body.style.height="100vh"
+
+        }
+    } catch (error) {
+        const erro = document.createElement('h5')
+        erro.textContent  = 'Ocorreu um erro, contate o administrador'
+        erro.className=styles.textoErro  
+        body.style.height="100vh"
+
+                   divGeral.appendChild(erro);
+
+    }
     }
 
     return (
-        <div className={styles.body} onLoad={pegarQuestoes} >
+        <div className={styles.body} id='body' onLoad={pegarQuestoes} >
             <img className={styles.logo} src={logo}></img>
             <div className={styles.tela} id="div">
                 {/* <div className={styles.pergunta} >
@@ -241,7 +279,6 @@ function Quiz() {
                 </div> */}
             
             </div>
-            {/* <h2 color='red'>{textoErro}</h2> */}
         </div>
     );
 }

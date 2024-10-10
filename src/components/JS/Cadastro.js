@@ -41,19 +41,57 @@ const navigate = useNavigate();
 
 
 
-    function irParaQuizProfessor() {
+   async function irParaQuizProfessor() {
         if (emailProfessor == '' || emailProfessor == null || emailProfessor == undefined) {
             setErroNull(false)
             setTextoErro('preencha este campo primeiro')
         }//VERIFICAR SE O EMAIL EXISTE E PEGAR A DATA ATUAL PRA MANDAR NO CADASTRO
         else {
             try {
-                            
-                      
+
+                
+                // const apikey='17WSkBjvI05cpe6aZzGehsoJ366ifMF9'
+                // const url = `https://api.captainverify.com/v2/verify?apikey=${apikey}&email=${emailProfessor}`
+                // const response=await fetch(url)
+                // const data=await response.json()
+                // console.log(data);
+                // // const dadoEmail=data.alunos        
+                //       if (data) {
+
+                const professorDados = {
+                    email: emailProfessor,
+                    data:data_atual
+                };
+                const res = await fetch(`${BASE_URL}v1/sinalibras/usuario`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(professorDados),
+                })
+                .then(response => response.json())
+.then(data => {
+    console.log(data);
+    if (data.status) {
+        
+
+                        const dadosParaEnviar = {
+                            email: data.usuario.id,
+                        };
+        
+                        setDados(dadosParaEnviar)
+                        navigate('/Quiz')
+    }
+    else{
+        setErroNull(false)
+        setTextoErro('Ocorreu um erro por parte do servidor, tente novamente mais tarde')
+    }
+}) 
+                        //   }
+
                 
             } catch (error) {
-                console.log(error);
-                
+                console.log(error);   
             }
           
         }
@@ -62,34 +100,34 @@ const navigate = useNavigate();
 
     async function mandarAluno(e) {
         e.preventDefault()
-        const alunoDados = {
-            nome: name,
-            email: email,
-            senha: senha,
-            data_nascimento: data_nasc,
-            foto_perfil: "",
-            data_cadastro:data_atual
-        };
         if (name == null || name == undefined || name == '' ||
-            email == null || email == undefined || email == '' ||
+        email == null || email == undefined || email == '' ||
             senha == null || senha == undefined || senha == '' ||
             conf_senha == null || conf_senha == undefined || conf_senha == '' ||
             data_nasc == null || data_nasc == undefined || data_nasc == ''
-        ) {
-            setErroNull(false)
-            setTextoErro('Todos os campos devem ser preenchidos, favor verificar')
-                }
-        else if (senha!==conf_senha) {
-            setErroNull(false)
-            setTextoErro('Sua Senha não confere')
-        }
-        else if(senha.length>8){            
-            setErroNull(false)
-            setTextoErro('Sua senha deve conter apenas 8 caracteres')
-        }
-        else {
-            
-            try {
+            ) {
+                setErroNull(false)
+                setTextoErro('Todos os campos devem ser preenchidos, favor verificar')
+            }
+            else if (senha!==conf_senha) {
+                setErroNull(false)
+                setTextoErro('Sua Senha não confere')
+            }
+            else if(senha.length>8){            
+                setErroNull(false)
+                setTextoErro('Sua senha deve conter apenas 8 caracteres')
+            }
+            else {
+                
+                try {
+                const alunoDados = {
+                    nome: name,
+                    email: email,
+                    senha: senha,
+                    data_nascimento: data_nasc,
+                    foto_perfil: "",
+                    data_cadastro:data_atual
+                };
                 const res = await fetch(`${BASE_URL}v1/sinalibras/aluno`, {
                     method: 'POST',
                     headers: {

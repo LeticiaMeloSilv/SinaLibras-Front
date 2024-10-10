@@ -1,7 +1,6 @@
 .body {
     background: rgb(199,226,254);
     background: linear-gradient(180deg, rgba(199,226,254,1) 50%, rgba(52,89,222,1) 100%);
-    height: 100%;
     width: 100vw;
     padding: 32px 6%;
     gap: 5%;
@@ -27,6 +26,10 @@
     justify-content: center;
     height: 70vh;
     width: 70vw;
+}
+.textoErro{
+    font-size: xx-large;
+    color: red;
 }
 .textoPergunta{
     color: #182b70;
@@ -62,6 +65,12 @@
     font-weight: bold;
     border: none;
     font-size: 3vw;
+}
+
+
+.respostaSelecionada{
+    background-color: #7FA1C3;
+    border-radius: 32px;
 }
 
 
